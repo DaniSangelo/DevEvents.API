@@ -20,7 +20,7 @@ namespace DevEvents.API.Controllers
                 new Categoria {Descricao = "Machine Learning"}
 
             };
-            return View();
+            return Ok(categorias);
         }
     }
 }

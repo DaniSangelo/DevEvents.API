@@ -1,37 +1,43 @@
 ﻿using DevEvents.API.Entidades;
+using DevEvents.API.Persistencia;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevEvents.API.Controllers
 {
     [Route("api/[controller]")]
     public class EventosController : ControllerBase
     {
+        private readonly DevEventsContext _context;
+
+        public EventosController(DevEventsContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IActionResult ObterEventos()
         {
-            var evento = new Evento
-            {
-                Titulo = "Bootcamp ASP.NET Core",
-                Descricao = "Evento gratuito de ASP.NET Core",
-                DataInicio = new DateTime(2021, 01, 25),
-                DataFim = new DateTime(2021, 01, 29)
-            };
-            return Ok(evento);
+            var eventos = _context.Eventos.ToList();            
+            return Ok(eventos);
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterEvento(int id)
         {
+            var evento = _context.Eventos.Include(e => e.Categoria).Include(e => e.Usuario).SingleOrDefault(e => e.Id == id);
+            if (evento == null)
+                return NotFound();
 
+            return Ok();
         }
 
         [HttpPost]
         public IActionResult Cadastrar([FromBody] Evento evento)
         {
+            _context.Eventos.Add(evento);
+            _context.SaveChanges();
             return Ok();
         }
         
@@ -43,6 +49,12 @@ namespace DevEvents.API.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult Cancelar(int id)
+        {
+            return NoContent();
+        }
+
+        [HttpPost("{id}/usuarios/{idUsuario}/inscrever")]
+        public IActionResult Inscrever(int id, int idUsuario, [FromBody] Inscricao inscricao)
         {
             return NoContent();
         }

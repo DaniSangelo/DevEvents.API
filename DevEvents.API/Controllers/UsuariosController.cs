@@ -1,9 +1,5 @@
 ﻿using DevEvents.API.Entidades;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevEvents.API.Controllers
 {
@@ -13,7 +9,12 @@ namespace DevEvents.API.Controllers
         [HttpPost]
         public IActionResult Cadastrar([FromBody] Usuario usuario)
         {
-            return Ok();
+            usuario = new Usuario
+            {
+                NomeCompleto = "Daniel Sangelo",
+                Email = "danielsangelo@hotmail.com"
+            };
+            return Ok(usuario);
         }
     }
 }
