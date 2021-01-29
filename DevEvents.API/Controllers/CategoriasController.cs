@@ -1,25 +1,23 @@
-﻿using DevEvents.API.Entidades;
+﻿using DevEvents.API.Persistencia;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevEvents.API.Controllers
 {
     [Route("api/[controller]")]
     public class CategoriasController : Controller
     {
+        private readonly DevEventsContext _dbContext;
+        public CategoriasController(DevEventsContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         [HttpGet]
         public IActionResult ObterTodas()
         {
-            var categorias = new List<Categoria>
-            {
-                new Categoria {Descricao = ".NET"},
-                new Categoria {Descricao = "Mobile"},
-                new Categoria {Descricao = "Machine Learning"}
+            var categorias = _dbContext.Categorias.ToList();
 
-            };
             return Ok(categorias);
         }
     }

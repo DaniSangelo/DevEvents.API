@@ -44,7 +44,9 @@ namespace DevEvents.API.Controllers
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, [FromBody] Evento evento)
         {
-            return NoContent();
+            _context.Update(evento);
+            _context.SaveChanges();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
